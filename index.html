@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>
+Skill Dashboard
+</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>
+Skill Performance Dashboard
+</h1>
+
+<p>
+Mechanical Section - APFIL
+</p>
+
+</header>
+
+
+
+<section class="cards">
+
+
+<div class="card">
+<h3>Total Employees</h3>
+<h2 id="total">
+0
+</h2>
+</div>
+
+
+<div class="card">
+<h3>Average Score</h3>
+<h2 id="average">
+0%
+</h2>
+</div>
+
+
+<div class="card">
+<h3>Skill Level A</h3>
+<h2 id="levelA">
+0
+</h2>
+</div>
+
+
+<div class="card">
+<h3>Skill Level B</h3>
+<h2 id="levelB">
+0
+</h2>
+</div>
+
+
+</section>
+
+
+
+<section class="charts">
+
+
+<div class="box">
+
+<h2>
+Skill Distribution
+</h2>
+
+<canvas id="skillChart"></canvas>
+
+</div>
+
+
+
+<div class="box">
+
+<h2>
+Role Performance
+</h2>
+
+<canvas id="roleChart"></canvas>
+
+</div>
+
+
+</section>
+
+
+
+
+<section class="table-box">
+
+
+<h2>
+Employee Details
+</h2>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Enroll
+</th>
+
+<th>
+Role
+</th>
+
+<th>
+Score
+</th>
+
+<th>
+Skill
+</th>
+
+
+</tr>
+
+</thead>
+
+
+<tbody id="table">
+
+</tbody>
+
+
+</table>
+
+
+</section>
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
