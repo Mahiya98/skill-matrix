@@ -1,5 +1,6 @@
 const sheetURL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRY0uYrlxVpMNyoC-rg_8w91TXF9RyhvirQGL6nuNZA3treJYL2tooOygrxskfvHHhHz5xq5HkHFy9C/pub?gid=1128780812&single=true&output=csv";
+"const sheetURL = "https://docs.google.com/spreadsheets/d/2PACX-1vRY0uYrlxVpMNyoC-rg_8w91TXF9RyhvirQGL6nuNZA3treJYL2tooOygrxskfvHHhHz5xq5HkHFy9C/export?format=csv&gid=1128780812";
+";
 
 
 let employees=[];
