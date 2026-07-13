@@ -2,72 +2,77 @@ const sheetURL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRY0uYrlxVpMNyoC-rg_8w91TXF9RyhvirQGL6nuNZA3treJYL2tooOygrxskfvHHhHz5xq5HkHFy9C/pub?gid=1128780812&single=true&output=csv";
 
 
-
 let employees=[];
-
 
 
 fetch(sheetURL)
 
-.then(response=>response.text())
+.then(response => response.text())
 
-.then(data=>{
-
-
-let rows=data.split("\n");
+.then(csv => {
 
 
-let headers=
-rows[0].split(",");
+console.log(csv);
 
 
+let result = Papa.parse(csv,{
+    header:true,
+    skipEmptyLines:true
+});
 
-rows.slice(1).forEach(row=>{
 
-
-let col=row.split(",");
+console.log(result.data);
 
 
 
-if(col.length>=7){
+employees = result.data.map(row => {
 
 
-employees.push({
+return {
 
-sbu:col[0],
+sbu: row["SBU"],
 
-section:col[1],
+section: row["Section"],
 
-enroll:col[2],
+enroll: row["Enroll"],
 
-role:col[3],
+role: row["Role"],
+
 
 score:
 parseFloat(
-col[4].replace("%","")
+(row["Score"] || "0")
+.replace("%","")
 ),
 
-skill:col[5],
 
-tna:col[6]
+skill:
+row["Skill Level"],
+
+
+tna:
+row["TNA"]
+
+};
 
 
 });
 
 
-}
 
-
-});
-
+console.log("Employees:",employees);
 
 
 createDashboard();
 
 
+})
+
+.catch(error=>{
+
+console.error(error);
 
 });
-
 
 
 
@@ -76,49 +81,44 @@ createDashboard();
 function createDashboard(){
 
 
-
-document.getElementById("total")
-.innerHTML=
+document.getElementById("total").innerHTML =
 employees.length;
 
 
 
-let avg=
+let avg =
 employees.reduce(
-(a,b)=>a+b.score,0
+(sum,e)=>sum+e.score,0
 )
 /employees.length;
 
 
-
-document.getElementById("average")
-.innerHTML=
+document.getElementById("average").innerHTML =
 avg.toFixed(2)+"%";
 
 
 
-
-
-let levelA=
-employees.filter(
-x=>x.skill.includes("A")
-).length;
-
-
-let levelB=
-employees.filter(
-x=>x.skill.includes("B")
+let levelA =
+employees.filter(e =>
+e.skill &&
+e.skill.includes("A")
 ).length;
 
 
 
-document.getElementById("levelA")
-.innerHTML=
+let levelB =
+employees.filter(e =>
+e.skill &&
+e.skill.includes("B")
+).length;
+
+
+
+document.getElementById("levelA").innerHTML =
 levelA;
 
 
-document.getElementById("levelB")
-.innerHTML=
+document.getElementById("levelB").innerHTML =
 levelB;
 
 
@@ -134,7 +134,6 @@ loadCharts();
 
 
 
-
 function loadTable(){
 
 
@@ -144,7 +143,7 @@ let html="";
 employees.forEach(e=>{
 
 
-html+=`
+html += `
 
 <tr>
 
@@ -160,12 +159,10 @@ html+=`
 
 `;
 
-
 });
 
 
-document.getElementById("table")
-.innerHTML=html;
+document.getElementById("table").innerHTML=html;
 
 
 }
@@ -178,15 +175,16 @@ document.getElementById("table")
 function loadCharts(){
 
 
-
 let skills={};
 
 
 employees.forEach(e=>{
 
 
-skills[e.skill]=
-(skills[e.skill]||0)+1;
+let s=e.skill || "Unknown";
+
+
+skills[s]=(skills[s]||0)+1;
 
 
 });
@@ -197,9 +195,7 @@ new Chart(
 document.getElementById("skillChart"),
 {
 
-
 type:"pie",
-
 
 data:{
 
@@ -216,10 +212,7 @@ data:Object.values(skills)
 
 }
 
-
 });
-
-
 
 
 
@@ -231,12 +224,14 @@ let roles={};
 employees.forEach(e=>{
 
 
-if(!roles[e.role])
-
-roles[e.role]=[];
+let role=e.role || "Unknown";
 
 
-roles[e.role].push(e.score);
+if(!roles[role])
+roles[role]=[];
+
+
+roles[role].push(e.score);
 
 
 });
@@ -246,21 +241,20 @@ roles[e.role].push(e.score);
 let roleAverage={};
 
 
-
-Object.keys(roles)
-.forEach(r=>{
+Object.keys(roles).forEach(role=>{
 
 
-roleAverage[r]=
+roleAverage[role]=
+
 (
-roles[r].reduce((a,b)=>a+b,0)
-/roles[r].length
+roles[role].reduce((a,b)=>a+b,0)
+/
+roles[role].length
+
 ).toFixed(2);
 
 
-
 });
-
 
 
 
@@ -288,7 +282,6 @@ data:Object.values(roleAverage)
 
 
 }
-
 
 
 });
